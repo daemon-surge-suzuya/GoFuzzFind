@@ -5,9 +5,12 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"sync"
 )
 
-func searchInFile(keyword string, filename string) {
+func searchInFile(keyword string, filename string, wg *sync.WaitGroup) {
+	defer wg.Done()
+
 	file, err := os.Open(filename)
 	if err != nil {
 		fmt.Printf("Error opening file %s: %v\n", filename, err)
@@ -38,9 +41,14 @@ func main() {
 	}
 
 	keyword := os.Args[1]
+	files := os.Args[2:]
 
-	for _, filename := range os.Args[2:] {
-		searchInFile(keyword, filename)
+	var wg sync.WaitGroup
+
+	for _, filename := range files {
+		wg.Add(1)
+		go searchInFile(keyword, filename, &wg)
 	}
-}
 
+	wg.Wait()
+}
