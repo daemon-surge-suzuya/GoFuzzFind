@@ -36,7 +36,7 @@ func searchInFile(keyword string, filename string, wg *sync.WaitGroup) {
 
 func main() {
 	if len(os.Args) < 3 {
-		fmt.Println("Usage: search-word-in-files <word> <file1> [<file2> ...]")
+		fmt.Println("Usage: GoFuzFind <word> <file1> [<file2> ...]")
 		return
 	}
 
